@@ -1,6 +1,6 @@
 # [Levered.finance](https://levered.finance/) - Decentralized margin trading protocol
 
-Open long and short positions on any tokens listed on [Aave](https://aave.com/) with up to 5x leverage. [Levered](https://levered.finance/) uses [Aave](https://aave.com/) for borrowing and [1inch.exchange](https://1inch.exchange/) for trading.
+Open long and short positions on any tokens listed on [Aave](https://aave.com/) with up to 5x leverage. [Levered](https://levered.finance/) uses [Aave](https://aave.com/) for borrowing and [1inch.exchange](https://1inch.exchange/) for trading. Positions are represented as NFTs that can be transferred to other accounts.
 
 This table shows the maximum leverage possible for each asset ([source](https://docs.aave.com/risk/asset-risk/risk-parameters)):
 
