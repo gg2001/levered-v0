@@ -25,4 +25,4 @@ This table shows the maximum leverage possible for each asset ([source](https://
 | Yearn YFI             | YFI      | 40.00%        | 55.00%                | 1.666666667      |
 | 0x                    | ZRX      | 60.00%        | 65.00%                | 2.5              |
 
-The maximum leverage for an asset can be calculated with the formula `max_leverage = 1/(1 - loan_to_value)`, where `loan_to_value` is the Loan To Value column in the chart.
+The maximum leverage for an asset can be calculated with the formula `max_leverage = 1/(1 - loan_to_value)`, where `loan_to_value` is the Loan To Value column in the table.
