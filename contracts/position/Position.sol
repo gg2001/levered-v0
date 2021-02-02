@@ -4,7 +4,7 @@ pragma solidity ^0.7.5;
 import {SafeMath} from '@openzeppelin/contracts/math/SafeMath.sol';
 import {IERC20} from '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import {SafeERC20} from '@openzeppelin/contracts/token/ERC20/SafeERC20.sol';
-import {FlashLoanReceiverPosition} from "../flashloan/FlashLoanReceiverPosition.sol";
+import {FlashLoanReceiverPosition} from "./FlashLoanReceiverPosition.sol";
 
 contract Position is FlashLoanReceiverPosition {
     using SafeMath for uint256;
