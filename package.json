@@ -1,0 +1,22 @@
+{
+  "name": "levered",
+  "version": "1.0.0",
+  "main": "hardhat.config.js",
+  "license": "MIT",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/gg2001/levered.git"
+  },
+  "author": "Gautham Ganesh Elango <gautham.gg@gmail.com> (https://gcubed.io/)",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.1",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@openzeppelin/contracts": "^3.3.0",
+    "@openzeppelin/contracts-upgradeable": "^3.3.0",
+    "@openzeppelin/hardhat-upgrades": "^1.6.0",
+    "chai": "^4.2.0",
+    "ethereum-waffle": "^3.2.2",
+    "ethers": "^5.0.27",
+    "hardhat": "^2.0.8"
+  }
+}
