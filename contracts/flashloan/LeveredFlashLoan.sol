@@ -42,13 +42,29 @@ contract LeveredFlashLoan is FlashLoanReceiverBase {
             initiator == address(this),
             "LeveredFlashLoan: initiator not address(this)"
         );
-        (address[] memory addressArray, uint256[] memory uintArray) =
-            abi.decode(params, (address[], uint256[]));
+        (bool isOpen, address[] memory addressArray, uint256[] memory uintArray) =
+            abi.decode(params, (bool, address[], uint256[]));
+        if (isOpen) {
+            openFlashLoan(assets, amounts, premiums, addressArray, uintArray);
+        } else {
+            closeFlashLoan(assets, amounts, premiums, addressArray, uintArray);
+        }
+        return true;
+    }
+
+    function openFlashLoan(
+        address[] calldata assets,
+        uint256[] calldata amounts,
+        uint256[] calldata premiums,
+        address[] memory addressArray,
+        uint256[] memory uintArray
+    ) private {
         IERC20 receivedAsset = IERC20(assets[0]);
         IERC20 newAsset = IERC20(addressArray[1]);
         uint256 totalAmount = uintArray[1].add(amounts[0]);
         uint256 amountOwing = amounts[0].add(premiums[0]);
         // Swap totalAmount of receivedAsset to newAsset
+        receivedAsset.approve(address(oneInchProtocol), totalAmount);
         (, uint256[] memory distribution) =
             oneInchProtocol.getExpectedReturn(
                 receivedAsset,
@@ -67,6 +83,7 @@ contract LeveredFlashLoan is FlashLoanReceiverBase {
                 0
             );
         // Deposit returnAmount to LENDING_POOL
+        IERC20(addressArray[1]).approve(address(LENDING_POOL), returnAmount);
         LENDING_POOL.deposit(
             addressArray[1],
             returnAmount,
@@ -84,6 +101,45 @@ contract LeveredFlashLoan is FlashLoanReceiverBase {
         );
         // Return flashLoan
         receivedAsset.approve(address(LENDING_POOL), amountOwing);
-        return true;
+    }
+
+    function closeFlashLoan(
+        address[] calldata assets,
+        uint256[] calldata amounts,
+        uint256[] calldata premiums,
+        address[] memory addressArray,
+        uint256[] memory uintArray
+    ) private {
+        IERC20 receivedAsset = IERC20(assets[0]);
+        IERC20 newAsset = IERC20(addressArray[1]);
+        uint256 amountOwing = amounts[0].add(premiums[0]);
+        // Repay
+        receivedAsset.approve(address(LENDING_POOL), amounts[0]);
+        LENDING_POOL.repay(address(receivedAsset), amounts[0], uintArray[0], addressArray[0]);
+        // Withdraw all
+        uint256 withdrawalAmount = IPosition(addressArray[0]).withdraw(address(LENDING_POOL), address(newAsset), addressArray[2], type(uint256).max, address(this));
+        // Swap
+        newAsset.approve(address(oneInchProtocol), withdrawalAmount);
+        (, uint256[] memory distribution) =
+            oneInchProtocol.getExpectedReturn(
+                newAsset,
+                receivedAsset,
+                withdrawalAmount,
+                uintArray[1],
+                0
+            );
+        uint256 returnAmount =
+            oneInchProtocol.swap(
+                newAsset,
+                receivedAsset,
+                withdrawalAmount,
+                uintArray[2],
+                distribution,
+                0
+            );
+        // Pay back user
+        receivedAsset.transfer(addressArray[3], returnAmount - amountOwing);
+        // Return flashLoan
+        receivedAsset.approve(address(LENDING_POOL), amountOwing);
     }
 }

@@ -35,9 +35,10 @@ contract Levered is
         address provider,
         uint16 _referralCode,
         address _referral,
-        address oneInch
+        address oneInch,
+        address dataProvider
     ) external initializer {
-        super.initializeProvider(ILendingPoolAddressesProvider(provider));
+        super.initializeProvider(ILendingPoolAddressesProvider(provider), dataProvider);
         super.initializeReferral(_referralCode, _referral, oneInch);
         positionContractCore = new Position();
         positionContractCore.initialize();
@@ -72,7 +73,7 @@ contract Levered is
         uintArray[1] = initialAmount + marginAmount;
         uintArray[2] = parts;
         uintArray[3] = minReturn;
-        bytes memory params = abi.encode(addressArray, uintArray);
+        bytes memory params = abi.encode(true, addressArray, uintArray);
         address receiverAddress = address(this);
         address onBehalfOf = address(this);
         LENDING_POOL.flashLoan(
@@ -90,9 +91,44 @@ contract Levered is
     function closePosition(
         address positionAddress,
         address fromAsset,
+        address aTokenAddress,
         address toAsset,
-        uint256 rateMode
+        uint256 rateMode,
+        uint256 parts,
+        uint256 minReturn
     ) external {
-        IPosition thisPosition = IPosition(positionAddress);
+        uint256 debtAmount;
+        if (rateMode == 1) {
+            (, debtAmount,,,,,,,) = DATA_PROVIDER.getUserReserveData(fromAsset, positionAddress);
+        } else {
+            (,, debtAmount,,,,,,) = DATA_PROVIDER.getUserReserveData(fromAsset, positionAddress);
+        }
+        address[] memory assets = new address[](1);
+        assets[0] = fromAsset;
+        uint256[] memory amounts = new uint256[](1);
+        amounts[0] = debtAmount;
+        uint256[] memory modes = new uint256[](1);
+        modes[0] = 0;
+        address[] memory addressArray = new address[](4);
+        addressArray[0] = positionAddress;
+        addressArray[1] = toAsset;
+        addressArray[2] = aTokenAddress;
+        addressArray[3] = msg.sender;
+        uint256[] memory uintArray = new uint256[](3);
+        uintArray[0] = rateMode;
+        uintArray[1] = parts;
+        uintArray[2] = minReturn;
+        bytes memory params = abi.encode(false, addressArray, uintArray);
+        address receiverAddress = address(this);
+        address onBehalfOf = address(this);
+        LENDING_POOL.flashLoan(
+            receiverAddress,
+            assets,
+            amounts,
+            modes,
+            onBehalfOf,
+            params,
+            referralCodeAave
+        );
     }
 }
