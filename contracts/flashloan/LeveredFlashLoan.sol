@@ -42,21 +42,11 @@ contract LeveredFlashLoan is FlashLoanReceiverBase {
             initiator == address(this),
             "LeveredFlashLoan: initiator not address(this)"
         );
-        (
-            address newPosition,
-            address toAsset,
-            uint256 interestRateMode,
-            uint256 amount,
-            uint256 parts,
-            uint256 minReturn
-        ) =
-            abi.decode(
-                params,
-                (address, address, uint256, uint256, uint256, uint256)
-            );
+        (address[] memory addressArray, uint256[] memory uintArray) =
+            abi.decode(params, (address[], uint256[]));
         IERC20 receivedAsset = IERC20(assets[0]);
-        IERC20 newAsset = IERC20(toAsset);
-        uint256 totalAmount = amount.add(amounts[0]);
+        IERC20 newAsset = IERC20(addressArray[1]);
+        uint256 totalAmount = uintArray[1].add(amounts[0]);
         uint256 amountOwing = amounts[0].add(premiums[0]);
         // Swap totalAmount of receivedAsset to newAsset
         (, uint256[] memory distribution) =
@@ -64,7 +54,7 @@ contract LeveredFlashLoan is FlashLoanReceiverBase {
                 receivedAsset,
                 newAsset,
                 totalAmount,
-                parts,
+                uintArray[2],
                 0
             );
         uint256 returnAmount =
@@ -72,25 +62,25 @@ contract LeveredFlashLoan is FlashLoanReceiverBase {
                 receivedAsset,
                 newAsset,
                 totalAmount,
-                minReturn,
+                uintArray[3],
                 distribution,
                 0
             );
         // Deposit returnAmount to LENDING_POOL
         LENDING_POOL.deposit(
-            toAsset,
+            addressArray[1],
             returnAmount,
-            newPosition,
+            addressArray[0],
             referralCodeAave
         );
         // Borrow amountOwing from newPosition
-        IPosition(newPosition).borrow(
+        IPosition(addressArray[0]).borrow(
             address(LENDING_POOL),
-            assets[0],
+            address(receivedAsset),
             amountOwing,
-            interestRateMode,
+            uintArray[0],
             referralCodeAave,
-            newPosition
+            addressArray[0]
         );
         // Return flashLoan
         receivedAsset.approve(address(LENDING_POOL), amountOwing);

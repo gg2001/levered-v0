@@ -64,7 +64,15 @@ contract Levered is
         amounts[0] = marginAmount;
         uint256[] memory modes = new uint256[](1);
         modes[0] = 0;
-        bytes memory params = abi.encode(newPosition, toAsset, interestRateMode, initialAmount + marginAmount, parts, minReturn);
+        address[] memory addressArray = new address[](2);
+        addressArray[0] = newPosition;
+        addressArray[1] = toAsset;
+        uint256[] memory uintArray = new uint256[](4);
+        uintArray[0] = interestRateMode;
+        uintArray[1] = initialAmount + marginAmount;
+        uintArray[2] = parts;
+        uintArray[3] = minReturn;
+        bytes memory params = abi.encode(addressArray, uintArray);
         address receiverAddress = address(this);
         address onBehalfOf = address(this);
         LENDING_POOL.flashLoan(
