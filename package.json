@@ -21,5 +21,8 @@
     "ethers": "^5.0.27",
     "hardhat": "^2.0.8",
     "hardhat-gas-reporter": "^1.0.4"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0"
   }
 }
