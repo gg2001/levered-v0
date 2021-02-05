@@ -70,7 +70,7 @@ contract Levered is
         addressArray[1] = toAsset;
         uint256[] memory uintArray = new uint256[](4);
         uintArray[0] = interestRateMode;
-        uintArray[1] = initialAmount + marginAmount;
+        uintArray[1] = initialAmount.add(marginAmount);
         uintArray[2] = parts;
         uintArray[3] = minReturn;
         bytes memory params = abi.encode(true, addressArray, uintArray);

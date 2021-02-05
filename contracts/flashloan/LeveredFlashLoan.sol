@@ -138,7 +138,7 @@ contract LeveredFlashLoan is FlashLoanReceiverBase {
                 0
             );
         // Pay back user
-        receivedAsset.transfer(addressArray[3], returnAmount - amountOwing);
+        receivedAsset.transfer(addressArray[3], returnAmount.sub(amountOwing));
         // Return flashLoan
         receivedAsset.approve(address(LENDING_POOL), amountOwing);
     }
