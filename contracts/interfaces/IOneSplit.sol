@@ -144,8 +144,7 @@ interface IOneSplit {
         uint256 flags
     )
         external
-        payable
-        returns(uint256 returnAmount);
+        payable;
 }
 
 

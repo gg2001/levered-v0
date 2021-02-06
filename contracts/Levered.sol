@@ -23,13 +23,13 @@ import {IOneSplit} from "./interfaces/IOneSplit.sol";
 contract Levered is
     MinimalProxy,
     LeveredFlashLoan,
-    Initializable,
-    ERC721Upgradeable
+    Initializable
 {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
-    IPosition positionContractCore;
+    IPosition public positionContractCore;
+    IPosition public newPos;
 
     function initialize(
         address provider,
@@ -70,7 +70,7 @@ contract Levered is
         addressArray[1] = toAsset;
         uint256[] memory uintArray = new uint256[](4);
         uintArray[0] = interestRateMode;
-        uintArray[1] = initialAmount.add(marginAmount);
+        uintArray[1] = initialAmount;
         uintArray[2] = parts;
         uintArray[3] = minReturn;
         bytes memory params = abi.encode(true, addressArray, uintArray);
@@ -85,6 +85,7 @@ contract Levered is
             params,
             referralCodeAave
         );
+        newPos = IPosition(newPosition);
         return newPosition;
     }
 

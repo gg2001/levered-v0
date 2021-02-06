@@ -92,7 +92,7 @@ contract Position is IPosition, Initializable {
         onlyOwner
     {
         to.transfer(amount);
-        emit WithdrawPosition(address(0), to, amount);
+        emit WithdrawTokens(address(0), to, amount);
     }
 
     function withdrawToken(
@@ -101,6 +101,6 @@ contract Position is IPosition, Initializable {
         uint256 amount
     ) external override onlyOwner {
         IERC20(asset).transfer(to, amount);
-        emit WithdrawPosition(asset, to, amount);
+        emit WithdrawTokens(asset, to, amount);
     }
 }

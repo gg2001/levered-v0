@@ -39,7 +39,7 @@ interface IPosition {
         address indexed user
     );
 
-    event WithdrawPosition(
+    event WithdrawTokens(
         address indexed asset,
         address indexed to,
         uint256 amount

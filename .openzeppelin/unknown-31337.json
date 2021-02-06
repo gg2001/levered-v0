@@ -1,0 +1,103 @@
+{
+  "manifestVersion": "3.1",
+  "impls": {
+    "79ef67268ba2c2e7c5e5a8dea0a905515466bafbe680d8e236a81f31c5e9cd07": {
+      "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      "txHash": "0x07c813243178a9afa17a1a1e85d9a23582a4a244521b3bfac8174c261f14bad7",
+      "layout": {
+        "storage": [
+          {
+            "contract": "FlashLoanReceiverBase",
+            "label": "ADDRESSES_PROVIDER",
+            "type": "t_contract(ILendingPoolAddressesProvider)5418",
+            "src": "contracts/flashloan/FlashLoanReceiverBase.sol:12"
+          },
+          {
+            "contract": "FlashLoanReceiverBase",
+            "label": "LENDING_POOL",
+            "type": "t_contract(ILendingPool)5267",
+            "src": "contracts/flashloan/FlashLoanReceiverBase.sol:13"
+          },
+          {
+            "contract": "FlashLoanReceiverBase",
+            "label": "DATA_PROVIDER",
+            "type": "t_contract(IProtocolDataProvider)6095",
+            "src": "contracts/flashloan/FlashLoanReceiverBase.sol:14"
+          },
+          {
+            "contract": "LeveredFlashLoan",
+            "label": "referralCodeAave",
+            "type": "t_uint16",
+            "src": "contracts/flashloan/LeveredFlashLoan.sol:16"
+          },
+          {
+            "contract": "LeveredFlashLoan",
+            "label": "referralOneInch",
+            "type": "t_address",
+            "src": "contracts/flashloan/LeveredFlashLoan.sol:17"
+          },
+          {
+            "contract": "LeveredFlashLoan",
+            "label": "oneInchProtocol",
+            "type": "t_contract(IOneSplit)5804",
+            "src": "contracts/flashloan/LeveredFlashLoan.sol:18"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:24"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:29"
+          },
+          {
+            "contract": "Levered",
+            "label": "positionContractCore",
+            "type": "t_contract(IPosition)5981",
+            "src": "contracts/Levered.sol:31"
+          },
+          {
+            "contract": "Levered",
+            "label": "newPos",
+            "type": "t_contract(IPosition)5981",
+            "src": "contracts/Levered.sol:32"
+          }
+        ],
+        "types": {
+          "t_contract(IPosition)5981": {
+            "label": "contract IPosition"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_uint16": {
+            "label": "uint16"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_contract(IOneSplit)5804": {
+            "label": "contract IOneSplit"
+          },
+          "t_contract(ILendingPoolAddressesProvider)5418": {
+            "label": "contract ILendingPoolAddressesProvider"
+          },
+          "t_contract(ILendingPool)5267": {
+            "label": "contract ILendingPool"
+          },
+          "t_contract(IProtocolDataProvider)6095": {
+            "label": "contract IProtocolDataProvider"
+          }
+        }
+      }
+    }
+  },
+  "admin": {
+    "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    "txHash": "0x52c9be0ab70f72512f49bb48732a9065e7375148954544397ec32cd4022ff196"
+  }
+}

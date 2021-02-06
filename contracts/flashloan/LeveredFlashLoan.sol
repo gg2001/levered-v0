@@ -73,15 +73,15 @@ contract LeveredFlashLoan is FlashLoanReceiverBase {
                 uintArray[2],
                 0
             );
-        uint256 returnAmount =
-            oneInchProtocol.swap(
-                receivedAsset,
-                newAsset,
-                totalAmount,
-                uintArray[3],
-                distribution,
-                0
-            );
+        oneInchProtocol.swap(
+            receivedAsset,
+            newAsset,
+            totalAmount,
+            uintArray[3],
+            distribution,
+            0
+        );
+        uint256 returnAmount = newAsset.balanceOf(address(this));
         // Deposit returnAmount to LENDING_POOL
         IERC20(addressArray[1]).approve(address(LENDING_POOL), returnAmount);
         LENDING_POOL.deposit(
@@ -128,7 +128,7 @@ contract LeveredFlashLoan is FlashLoanReceiverBase {
                 uintArray[1],
                 0
             );
-        uint256 returnAmount =
+        //uint256 returnAmount =
             oneInchProtocol.swap(
                 newAsset,
                 receivedAsset,
@@ -137,6 +137,7 @@ contract LeveredFlashLoan is FlashLoanReceiverBase {
                 distribution,
                 0
             );
+        uint256 returnAmount = receivedAsset.balanceOf(address(this));
         // Pay back user
         receivedAsset.transfer(addressArray[3], returnAmount.sub(amountOwing));
         // Return flashLoan
