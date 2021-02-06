@@ -42,7 +42,7 @@ describe("Levered contract", function () {
   let flashLoanFeePlusOne = 1 + flashLoanFee;
   let positionSize = ethers.utils.parseEther(positionSizeNum.toString());
   // If leverageNum = 5 (Maximum)
-  // positionMarginNum = ((positionSizeNum * 5) - positionSizeNum)/flashLoanFeePlusOne
+  // let positionMarginNum = ((positionSizeNum * leverageNum) - positionSizeNum)/(1.059)
   let positionMarginNum = (positionSizeNum * 3) - positionSizeNum;
   let positionMargin = ethers.utils.parseEther(positionMarginNum.toString());
   let oneInchParts = 10;
