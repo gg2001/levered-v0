@@ -1,17 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.7.5;
 
-import {
-    Initializable
-} from "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol";
-import {SafeMath} from "@openzeppelin/contracts/math/SafeMath.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {SafeERC20} from "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
-import {
-    ILendingPoolAddressesProvider
-} from "../interfaces/ILendingPoolAddressesProvider.sol";
-import {ILendingPool} from "../interfaces/ILendingPool.sol";
-
 interface IPosition {
     function owner() external view returns (address);
 

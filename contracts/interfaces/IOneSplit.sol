@@ -30,7 +30,6 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 //         \__________________/
 //
 
-
 contract IOneSplitConsts {
     // flags = FLAG_DISABLE_UNISWAP + FLAG_DISABLE_BANCOR + ...
     uint256 internal constant FLAG_DISABLE_UNISWAP = 0x01;
@@ -67,10 +66,14 @@ contract IOneSplitConsts {
     uint256 internal constant FLAG_DISABLE_CURVE_PAX = 0x80000000;
     uint256 internal constant FLAG_DISABLE_CURVE_RENBTC = 0x100000000;
     uint256 internal constant FLAG_DISABLE_CURVE_TBTC = 0x200000000;
-    uint256 internal constant DEPRECATED_FLAG_ENABLE_MULTI_PATH_USDT = 0x400000000; // Deprecated, Turned off by default
-    uint256 internal constant DEPRECATED_FLAG_ENABLE_MULTI_PATH_WBTC = 0x800000000; // Deprecated, Turned off by default
-    uint256 internal constant DEPRECATED_FLAG_ENABLE_MULTI_PATH_TBTC = 0x1000000000; // Deprecated, Turned off by default
-    uint256 internal constant DEPRECATED_FLAG_ENABLE_MULTI_PATH_RENBTC = 0x2000000000; // Deprecated, Turned off by default
+    uint256 internal constant DEPRECATED_FLAG_ENABLE_MULTI_PATH_USDT =
+        0x400000000; // Deprecated, Turned off by default
+    uint256 internal constant DEPRECATED_FLAG_ENABLE_MULTI_PATH_WBTC =
+        0x800000000; // Deprecated, Turned off by default
+    uint256 internal constant DEPRECATED_FLAG_ENABLE_MULTI_PATH_TBTC =
+        0x1000000000; // Deprecated, Turned off by default
+    uint256 internal constant DEPRECATED_FLAG_ENABLE_MULTI_PATH_RENBTC =
+        0x2000000000; // Deprecated, Turned off by default
     uint256 internal constant FLAG_DISABLE_DFORCE_SWAP = 0x4000000000;
     uint256 internal constant FLAG_DISABLE_SHELL = 0x8000000000;
     uint256 internal constant FLAG_ENABLE_CHI_BURN = 0x10000000000;
@@ -85,24 +88,30 @@ contract IOneSplitConsts {
     uint256 internal constant FLAG_DISABLE_BALANCER_1 = 0x2000000000000;
     uint256 internal constant FLAG_DISABLE_BALANCER_2 = 0x4000000000000;
     uint256 internal constant FLAG_DISABLE_BALANCER_3 = 0x8000000000000;
-    uint256 internal constant DEPRECATED_FLAG_ENABLE_KYBER_UNISWAP_RESERVE = 0x10000000000000; // Deprecated, Turned off by default
-    uint256 internal constant DEPRECATED_FLAG_ENABLE_KYBER_OASIS_RESERVE = 0x20000000000000; // Deprecated, Turned off by default
-    uint256 internal constant DEPRECATED_FLAG_ENABLE_KYBER_BANCOR_RESERVE = 0x40000000000000; // Deprecated, Turned off by default
-    uint256 internal constant FLAG_ENABLE_REFERRAL_GAS_SPONSORSHIP = 0x80000000000000; // Turned off by default
-    uint256 internal constant DEPRECATED_FLAG_ENABLE_MULTI_PATH_COMP = 0x100000000000000; // Deprecated, Turned off by default
+    uint256 internal constant DEPRECATED_FLAG_ENABLE_KYBER_UNISWAP_RESERVE =
+        0x10000000000000; // Deprecated, Turned off by default
+    uint256 internal constant DEPRECATED_FLAG_ENABLE_KYBER_OASIS_RESERVE =
+        0x20000000000000; // Deprecated, Turned off by default
+    uint256 internal constant DEPRECATED_FLAG_ENABLE_KYBER_BANCOR_RESERVE =
+        0x40000000000000; // Deprecated, Turned off by default
+    uint256 internal constant FLAG_ENABLE_REFERRAL_GAS_SPONSORSHIP =
+        0x80000000000000; // Turned off by default
+    uint256 internal constant DEPRECATED_FLAG_ENABLE_MULTI_PATH_COMP =
+        0x100000000000000; // Deprecated, Turned off by default
     uint256 internal constant FLAG_DISABLE_KYBER_ALL = 0x200000000000000;
     uint256 internal constant FLAG_DISABLE_KYBER_1 = 0x400000000000000;
     uint256 internal constant FLAG_DISABLE_KYBER_2 = 0x800000000000000;
     uint256 internal constant FLAG_DISABLE_KYBER_3 = 0x1000000000000000;
     uint256 internal constant FLAG_DISABLE_KYBER_4 = 0x2000000000000000;
-    uint256 internal constant FLAG_ENABLE_CHI_BURN_BY_ORIGIN = 0x4000000000000000;
+    uint256 internal constant FLAG_ENABLE_CHI_BURN_BY_ORIGIN =
+        0x4000000000000000;
     uint256 internal constant FLAG_DISABLE_MOONISWAP_ALL = 0x8000000000000000;
     uint256 internal constant FLAG_DISABLE_MOONISWAP_ETH = 0x10000000000000000;
     uint256 internal constant FLAG_DISABLE_MOONISWAP_DAI = 0x20000000000000000;
     uint256 internal constant FLAG_DISABLE_MOONISWAP_USDC = 0x40000000000000000;
-    uint256 internal constant FLAG_DISABLE_MOONISWAP_POOL_TOKEN = 0x80000000000000000;
+    uint256 internal constant FLAG_DISABLE_MOONISWAP_POOL_TOKEN =
+        0x80000000000000000;
 }
-
 
 interface IOneSplit {
     function getExpectedReturn(
@@ -114,10 +123,7 @@ interface IOneSplit {
     )
         external
         view
-        returns(
-            uint256 returnAmount,
-            uint256[] memory distribution
-        );
+        returns (uint256 returnAmount, uint256[] memory distribution);
 
     function getExpectedReturnWithGas(
         IERC20 fromToken,
@@ -129,7 +135,7 @@ interface IOneSplit {
     )
         external
         view
-        returns(
+        returns (
             uint256 returnAmount,
             uint256 estimateGasAmount,
             uint256[] memory distribution
@@ -142,11 +148,8 @@ interface IOneSplit {
         uint256 minReturn,
         uint256[] memory distribution,
         uint256 flags
-    )
-        external
-        payable;
+    ) external payable;
 }
-
 
 interface IOneSplitMulti is IOneSplit {
     function getExpectedReturnWithGasMulti(
@@ -158,7 +161,7 @@ interface IOneSplitMulti is IOneSplit {
     )
         external
         view
-        returns(
+        returns (
             uint256[] memory returnAmounts,
             uint256 estimateGasAmount,
             uint256[] memory distribution
@@ -170,8 +173,5 @@ interface IOneSplitMulti is IOneSplit {
         uint256 minReturn,
         uint256[] memory distribution,
         uint256[] memory flags
-    )
-        external
-        payable
-        returns(uint256 returnAmount);
+    ) external payable returns (uint256 returnAmount);
 }

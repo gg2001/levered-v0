@@ -19,7 +19,6 @@ import {
 import {IPosition} from "./interfaces/IPosition.sol";
 import {ILevered} from "./interfaces/ILevered.sol";
 import {ILendingPool} from "./interfaces/ILendingPool.sol";
-import {IOneSplit} from "./interfaces/IOneSplit.sol";
 
 contract Levered is
     ILevered,

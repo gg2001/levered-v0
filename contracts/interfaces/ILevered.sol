@@ -8,10 +8,7 @@ interface ILevered {
         uint256 positionId
     );
 
-    event ClosePosition(
-        address indexed user,
-        uint256 positionId
-    );
+    event ClosePosition(address indexed user, uint256 positionId);
 
     function initialize(
         address provider,

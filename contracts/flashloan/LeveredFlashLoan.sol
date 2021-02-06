@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: agpl-3.0
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.7.5;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -42,8 +42,11 @@ contract LeveredFlashLoan is FlashLoanReceiverBase {
             initiator == address(this),
             "LeveredFlashLoan: initiator not address(this)"
         );
-        (bool isOpen, address[] memory addressArray, uint256[] memory uintArray) =
-            abi.decode(params, (bool, address[], uint256[]));
+        (
+            bool isOpen,
+            address[] memory addressArray,
+            uint256[] memory uintArray
+        ) = abi.decode(params, (bool, address[], uint256[]));
         if (isOpen) {
             openFlashLoan(assets, amounts, premiums, addressArray, uintArray);
         } else {
@@ -115,9 +118,21 @@ contract LeveredFlashLoan is FlashLoanReceiverBase {
         uint256 amountOwing = amounts[0].add(premiums[0]);
         // Repay
         receivedAsset.approve(address(LENDING_POOL), amounts[0]);
-        LENDING_POOL.repay(address(receivedAsset), amounts[0], uintArray[0], addressArray[0]);
+        LENDING_POOL.repay(
+            address(receivedAsset),
+            amounts[0],
+            uintArray[0],
+            addressArray[0]
+        );
         // Withdraw all
-        uint256 withdrawalAmount = IPosition(addressArray[0]).withdraw(address(LENDING_POOL), address(newAsset), addressArray[2], type(uint256).max, address(this));
+        uint256 withdrawalAmount =
+            IPosition(addressArray[0]).withdraw(
+                address(LENDING_POOL),
+                address(newAsset),
+                addressArray[2],
+                type(uint256).max,
+                address(this)
+            );
         // Swap
         newAsset.approve(address(oneInchProtocol), withdrawalAmount);
         (, uint256[] memory distribution) =
@@ -129,14 +144,14 @@ contract LeveredFlashLoan is FlashLoanReceiverBase {
                 0
             );
         //uint256 returnAmount =
-            oneInchProtocol.swap(
-                newAsset,
-                receivedAsset,
-                withdrawalAmount,
-                uintArray[2],
-                distribution,
-                0
-            );
+        oneInchProtocol.swap(
+            newAsset,
+            receivedAsset,
+            withdrawalAmount,
+            uintArray[2],
+            distribution,
+            0
+        );
         uint256 returnAmount = receivedAsset.balanceOf(address(this));
         // Pay back user
         receivedAsset.transfer(addressArray[3], returnAmount.sub(amountOwing));
