@@ -324,3 +324,7 @@ artifacts
 
 # truffle
 build/
+
+# OpenZeppelin
+.openzeppelin/dev-*.json
+.openzeppelin/.session
