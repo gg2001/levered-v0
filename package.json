@@ -22,6 +22,10 @@
     "hardhat": "^2.0.8",
     "hardhat-gas-reporter": "^1.0.4"
   },
+  "scripts": {
+    "build": "hardhat compile",
+    "test": "hardhat test"
+  },
   "dependencies": {
     "dotenv": "^8.2.0"
   }
