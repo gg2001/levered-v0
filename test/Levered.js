@@ -77,7 +77,7 @@ describe("Levered contract", function () {
 
     returnVal = (await oneSplit.getExpectedReturn(DAI.address, WETH.address, totalAmount, oneInchParts, 0)).returnAmount;
     minReturnNum = Math.round(parseInt(returnVal.toString())*slippage);
-    minReturn = ethers.utils.parseEther(ethers.utils.formatEther(minReturnNum.toString()));
+    minReturn = ethers.utils.parseEther(ethers.utils.formatEther(minReturnNum.toLocaleString('fullwide', {useGrouping:false})));
   });
 
   describe("Deployment", function () {
@@ -104,6 +104,7 @@ describe("Levered contract", function () {
 
       await DAI.connect(testSigner).approve(levered.address, positionSize);
       await levered.connect(testSigner).openPosition(DAI.address, positionSize, positionMargin, WETH.address, interestRateMode, oneInchParts, minReturn);
+      // expect emit
 
       expect((await DAI.balanceOf(testAddr)).toString()).to.be.equal(DAIBalance.sub(positionSize).toString());
 
@@ -125,6 +126,52 @@ describe("Levered contract", function () {
 
       let newPosition = (await levered.getUsersPositions(testAddr))[0][0];
       let newPositionIndex = (await levered.getUsersPositions(testAddr))[1][0].toNumber();
+
+      let collateral = (await dataProvider.getUserReserveData(WETH.address, newPosition)).currentATokenBalance;
+      let returnValClose = (await oneSplit.getExpectedReturn(WETH.address, DAI.address, collateral, oneInchParts, 0)).returnAmount;
+      let minReturnCloseNum = Math.round(parseInt(returnValClose.toString())*slippage);
+      let minReturnClose = ethers.utils.parseEther(ethers.utils.formatEther(minReturnCloseNum.toLocaleString('fullwide', {useGrouping:false})));
+
+      await expect(levered.closePosition(newPositionIndex, DAI.address, aWETH.address, WETH.address, interestRateMode, oneInchParts, minReturnClose)).to.be.revertedWith('Levered: msg.sender not owner of positionID');
+
+      let DAIBalance = await DAI.balanceOf(testAddr);
+
+      await levered.connect(testSigner).closePosition(newPositionIndex, DAI.address, aWETH.address, WETH.address, interestRateMode, oneInchParts, minReturnClose);
+      // expect emit
+
+      expect((await DAI.balanceOf(testAddr)).gt(DAIBalance)).to.be.true;
+    });
+  });
+
+  describe("ERC721", function () {
+    it("Should allow transfers", async function () {
+      await DAI.connect(testSigner).approve(levered.address, positionSize);
+      await levered.connect(testSigner).openPosition(DAI.address, positionSize, positionMargin, WETH.address, interestRateMode, oneInchParts, minReturn);
+
+      let newPosition = (await levered.getUsersPositions(testAddr))[0][0];
+      let newPositionIndex = (await levered.getUsersPositions(testAddr))[1][0].toNumber();
+
+      await levered.connect(testSigner).transferFrom(testAddr, owner.address, 0);
+
+      let transferredPosition = (await levered.getUsersPositions(owner.address))[0][0];
+      let transferredPositionIndex = (await levered.getUsersPositions(owner.address))[1][0].toNumber();
+
+      expect(transferredPosition).to.be.equal(newPosition);
+      expect(transferredPositionIndex).to.be.equal(newPositionIndex);
+
+      let collateral = (await dataProvider.getUserReserveData(WETH.address, transferredPosition)).currentATokenBalance;
+      let returnValClose = (await oneSplit.getExpectedReturn(WETH.address, DAI.address, collateral, oneInchParts, 0)).returnAmount;
+      let minReturnCloseNum = Math.round(parseInt(returnValClose.toString())*slippage);
+      let minReturnClose = ethers.utils.parseEther(ethers.utils.formatEther(minReturnCloseNum.toLocaleString('fullwide', {useGrouping:false})));
+
+      await expect(levered.connect(testSigner).closePosition(newPositionIndex, DAI.address, aWETH.address, WETH.address, interestRateMode, oneInchParts, minReturnClose)).to.be.revertedWith('Levered: msg.sender not owner of positionID');
+
+      let DAIBalance = await DAI.balanceOf(owner.address);
+
+      await levered.closePosition(transferredPositionIndex, DAI.address, aWETH.address, WETH.address, interestRateMode, oneInchParts, minReturnClose);
+      // expect emit
+
+      expect((await DAI.balanceOf(owner.address)).gt(DAIBalance)).to.be.true;
     });
   });
 });
