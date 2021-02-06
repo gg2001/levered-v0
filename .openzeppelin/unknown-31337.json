@@ -1,27 +1,27 @@
 {
   "manifestVersion": "3.1",
   "impls": {
-    "5d937c8f5961462990f136e801eedfb5a786afb0fd12d85716ba8bc5c6440479": {
+    "17db3c4afe377e7ff08e6b0c8986664775e451eef9c61f27d5691eeb7c9a6711": {
       "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-      "txHash": "0x1a9bac415423c9e636776d9fe793d7160d36d49963a5e1af8a9074042184c017",
+      "txHash": "0xbb1a36bc9ab9d87f27c97e6323a7cd6f98b96324300fe3340b13a05efe2a611f",
       "layout": {
         "storage": [
           {
             "contract": "FlashLoanReceiverBase",
             "label": "ADDRESSES_PROVIDER",
-            "type": "t_contract(ILendingPoolAddressesProvider)5526",
+            "type": "t_contract(ILendingPoolAddressesProvider)5496",
             "src": "contracts/flashloan/FlashLoanReceiverBase.sol:12"
           },
           {
             "contract": "FlashLoanReceiverBase",
             "label": "LENDING_POOL",
-            "type": "t_contract(ILendingPool)5375",
+            "type": "t_contract(ILendingPool)5345",
             "src": "contracts/flashloan/FlashLoanReceiverBase.sol:13"
           },
           {
             "contract": "FlashLoanReceiverBase",
             "label": "DATA_PROVIDER",
-            "type": "t_contract(IProtocolDataProvider)6203",
+            "type": "t_contract(IProtocolDataProvider)6208",
             "src": "contracts/flashloan/FlashLoanReceiverBase.sol:14"
           },
           {
@@ -39,7 +39,7 @@
           {
             "contract": "LeveredFlashLoan",
             "label": "oneInchProtocol",
-            "type": "t_contract(IOneSplit)5912",
+            "type": "t_contract(IOneSplit)5961",
             "src": "contracts/flashloan/LeveredFlashLoan.sol:18"
           },
           {
@@ -129,18 +129,18 @@
           {
             "contract": "Levered",
             "label": "positionContractCore",
-            "type": "t_contract(IPosition)6089",
-            "src": "contracts/Levered.sol:32"
+            "type": "t_contract(IPosition)6094",
+            "src": "contracts/Levered.sol:34"
           },
           {
             "contract": "Levered",
             "label": "positionList",
             "type": "t_array(t_address)dyn_storage",
-            "src": "contracts/Levered.sol:33"
+            "src": "contracts/Levered.sol:35"
           }
         ],
         "types": {
-          "t_contract(IPosition)6089": {
+          "t_contract(IPosition)6094": {
             "label": "contract IPosition"
           },
           "t_array(t_address)dyn_storage": {
@@ -260,16 +260,16 @@
           "t_uint16": {
             "label": "uint16"
           },
-          "t_contract(IOneSplit)5912": {
+          "t_contract(IOneSplit)5961": {
             "label": "contract IOneSplit"
           },
-          "t_contract(ILendingPoolAddressesProvider)5526": {
+          "t_contract(ILendingPoolAddressesProvider)5496": {
             "label": "contract ILendingPoolAddressesProvider"
           },
-          "t_contract(ILendingPool)5375": {
+          "t_contract(ILendingPool)5345": {
             "label": "contract ILendingPool"
           },
-          "t_contract(IProtocolDataProvider)6203": {
+          "t_contract(IProtocolDataProvider)6208": {
             "label": "contract IProtocolDataProvider"
           }
         }

@@ -17,10 +17,12 @@ import {
     ILendingPoolAddressesProvider
 } from "./interfaces/ILendingPoolAddressesProvider.sol";
 import {IPosition} from "./interfaces/IPosition.sol";
+import {ILevered} from "./interfaces/ILevered.sol";
 import {ILendingPool} from "./interfaces/ILendingPool.sol";
 import {IOneSplit} from "./interfaces/IOneSplit.sol";
 
 contract Levered is
+    ILevered,
     MinimalProxy,
     LeveredFlashLoan,
     Initializable,
@@ -40,7 +42,7 @@ contract Levered is
         address dataProvider,
         string memory _name,
         string memory _symbol
-    ) external initializer {
+    ) external override initializer {
         super.initializeProvider(
             ILendingPoolAddressesProvider(provider),
             dataProvider
@@ -59,7 +61,7 @@ contract Levered is
         uint256 interestRateMode,
         uint256 parts,
         uint256 minReturn
-    ) external {
+    ) external override {
         // new Position
         address newPosition = createClone(address(positionContractCore));
         IPosition(newPosition).initialize();
@@ -98,6 +100,7 @@ contract Levered is
         );
         positionList.push(newPosition);
         _safeMint(msg.sender, positionList.length - 1);
+        emit NewPosition(msg.sender, newPosition, positionList.length - 1);
     }
 
     function closePosition(
@@ -108,22 +111,22 @@ contract Levered is
         uint256 rateMode,
         uint256 parts,
         uint256 minReturn
-    ) external {
+    ) external override {
         require(
             msg.sender == ownerOf(positionId),
             "Levered: msg.sender not owner of positionID"
         );
-        address positionAddress = positionList[positionId];
+        //address positionAddress = positionList[positionId];
         uint256 debtAmount;
         if (rateMode == 1) {
             (, debtAmount, , , , , , , ) = DATA_PROVIDER.getUserReserveData(
                 fromAsset,
-                positionAddress
+                positionList[positionId]
             );
         } else {
             (, , debtAmount, , , , , , ) = DATA_PROVIDER.getUserReserveData(
                 fromAsset,
-                positionAddress
+                positionList[positionId]
             );
         }
         address[] memory assets = new address[](1);
@@ -133,7 +136,7 @@ contract Levered is
         uint256[] memory modes = new uint256[](1);
         modes[0] = 0;
         address[] memory addressArray = new address[](4);
-        addressArray[0] = positionAddress;
+        addressArray[0] = positionList[positionId];
         addressArray[1] = toAsset;
         addressArray[2] = aTokenAddress;
         addressArray[3] = msg.sender;
@@ -152,11 +155,13 @@ contract Levered is
             referralCodeAave
         );
         _burn(positionId);
+        emit ClosePosition(msg.sender, positionId);
     }
 
     function getUsersPositions(address user)
         external
         view
+        override
         returns (address[] memory, uint256[] memory)
     {
         uint256 userBalance = balanceOf(user);

@@ -36,7 +36,6 @@ contract Position is IPosition, Initializable {
         aToken.approve(lendingPool, aToken.balanceOf(address(this)));
         uint256 amountToWithdraw =
             ILendingPool(lendingPool).withdraw(asset, amount, to);
-        emit WithdrawPosition(asset, address(this), to, amount);
         return amountToWithdraw;
     }
 
@@ -56,13 +55,6 @@ contract Position is IPosition, Initializable {
             onBehalfOf
         );
         IERC20(asset).transfer(msg.sender, amount);
-        emit BorrowPosition(
-            asset,
-            msg.sender,
-            address(this),
-            amount,
-            interestRateMode
-        );
     }
 
     function swapBorrowRateMode(
@@ -71,7 +63,6 @@ contract Position is IPosition, Initializable {
         uint256 rateMode
     ) external override onlyOwner {
         ILendingPool(lendingPool).swapBorrowRateMode(asset, rateMode);
-        emit SwapPosition(asset, address(this), rateMode);
     }
 
     function setUserUseReserveAsCollateral(
@@ -83,7 +74,6 @@ contract Position is IPosition, Initializable {
             asset,
             useAsCollateral
         );
-        emit ReserveUsedAsCollateralEnabledPosition(asset, address(this));
     }
 
     function withdrawETH(address payable to, uint256 amount)
@@ -92,7 +82,6 @@ contract Position is IPosition, Initializable {
         onlyOwner
     {
         to.transfer(amount);
-        emit WithdrawTokens(address(0), to, amount);
     }
 
     function withdrawToken(
@@ -101,6 +90,5 @@ contract Position is IPosition, Initializable {
         uint256 amount
     ) external override onlyOwner {
         IERC20(asset).transfer(to, amount);
-        emit WithdrawTokens(asset, to, amount);
     }
 }

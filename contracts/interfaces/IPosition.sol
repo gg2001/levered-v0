@@ -13,38 +13,6 @@ import {
 import {ILendingPool} from "../interfaces/ILendingPool.sol";
 
 interface IPosition {
-    event WithdrawPosition(
-        address indexed reserve,
-        address indexed user,
-        address indexed to,
-        uint256 amount
-    );
-
-    event BorrowPosition(
-        address indexed reserve,
-        address user,
-        address indexed onBehalfOf,
-        uint256 amount,
-        uint256 borrowRateMode
-    );
-
-    event SwapPosition(
-        address indexed reserve,
-        address indexed user,
-        uint256 rateMode
-    );
-
-    event ReserveUsedAsCollateralEnabledPosition(
-        address indexed reserve,
-        address indexed user
-    );
-
-    event WithdrawTokens(
-        address indexed asset,
-        address indexed to,
-        uint256 amount
-    );
-
     function owner() external view returns (address);
 
     function initialize() external;

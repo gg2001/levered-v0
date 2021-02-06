@@ -103,8 +103,9 @@ describe("Levered contract", function () {
       let DAIBalance = await DAI.balanceOf(testAddr);
 
       await DAI.connect(testSigner).approve(levered.address, positionSize);
-      await levered.connect(testSigner).openPosition(DAI.address, positionSize, positionMargin, WETH.address, interestRateMode, oneInchParts, minReturn);
-      // expect emit
+      await expect(levered.connect(testSigner).openPosition(DAI.address, positionSize, positionMargin, WETH.address, interestRateMode, oneInchParts, minReturn))
+        .to.emit(levered, 'NewPosition')
+        .withArgs(testAddr, (await levered.getUsersPositions(testAddr))[0][0], (await levered.getUsersPositions(testAddr))[1][0].toNumber());
 
       expect((await DAI.balanceOf(testAddr)).toString()).to.be.equal(DAIBalance.sub(positionSize).toString());
 
@@ -136,8 +137,9 @@ describe("Levered contract", function () {
 
       let DAIBalance = await DAI.balanceOf(testAddr);
 
-      await levered.connect(testSigner).closePosition(newPositionIndex, DAI.address, aWETH.address, WETH.address, interestRateMode, oneInchParts, minReturnClose);
-      // expect emit
+      await expect(levered.connect(testSigner).closePosition(newPositionIndex, DAI.address, aWETH.address, WETH.address, interestRateMode, oneInchParts, minReturnClose))
+        .to.emit(levered, 'ClosePosition')
+        .withArgs(testAddr, newPositionIndex);
 
       expect((await DAI.balanceOf(testAddr)).gt(DAIBalance)).to.be.true;
     });
@@ -168,8 +170,9 @@ describe("Levered contract", function () {
 
       let DAIBalance = await DAI.balanceOf(owner.address);
 
-      await levered.closePosition(transferredPositionIndex, DAI.address, aWETH.address, WETH.address, interestRateMode, oneInchParts, minReturnClose);
-      // expect emit
+      await expect(levered.closePosition(transferredPositionIndex, DAI.address, aWETH.address, WETH.address, interestRateMode, oneInchParts, minReturnClose))
+        .to.emit(levered, 'ClosePosition')
+        .withArgs(owner.address, transferredPositionIndex);
 
       expect((await DAI.balanceOf(owner.address)).gt(DAIBalance)).to.be.true;
     });
