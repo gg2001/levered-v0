@@ -20,6 +20,7 @@
     "ethereum-waffle": "^3.2.2",
     "ethers": "^5.0.27",
     "hardhat": "^2.0.8",
+    "hardhat-abi-exporter": "^2.0.8",
     "hardhat-gas-reporter": "^1.0.4"
   },
   "scripts": {

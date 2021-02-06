@@ -114,7 +114,11 @@ describe("Levered contract", function () {
 
       expect(newPositionIndex).to.be.equal(0);
       expect((await dataProvider.getUserReserveData(WETH.address, newPosition)).currentATokenBalance.gte(minReturn)).to.be.true;
-      expect((await dataProvider.getUserReserveData(DAI.address, newPosition)).currentVariableDebt.gte(positionMargin)).to.be.true;
+      if (interestRateMode == 1) {
+        expect((await dataProvider.getUserReserveData(DAI.address, newPosition)).currentStableDebt.gte(positionMargin)).to.be.true;
+      } else {
+        expect((await dataProvider.getUserReserveData(DAI.address, newPosition)).currentVariableDebt.gte(positionMargin)).to.be.true;
+      }
       expect((await lendingPool.getUserAccountData(newPosition)).healthFactor.gte(ethers.utils.parseEther('1'))).to.be.true;
       expect(await levered.ownerOf(newPositionIndex)).to.be.equal(testAddr);
     });
