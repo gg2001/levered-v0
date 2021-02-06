@@ -34,7 +34,7 @@ describe("Levered contract", function () {
   let addrs;
 
   let positionSizeNum = 1000;
-  let leverageNum = 3;
+  let leverageNum = 4.5;
   let slippage = 0.99;
   let interestRateMode = 2;
 
@@ -42,8 +42,8 @@ describe("Levered contract", function () {
   let flashLoanFeePlusOne = 1 + flashLoanFee;
   let positionSize = ethers.utils.parseEther(positionSizeNum.toString());
   // If leverageNum = 5 (Maximum)
-  // let positionMarginNum = ((positionSizeNum * leverageNum) - positionSizeNum)/(1.059)
-  let positionMarginNum = (positionSizeNum * 3) - positionSizeNum;
+  // let positionMarginNum = ((positionSizeNum * leverageNum) - positionSizeNum)/(1.06)
+  let positionMarginNum = (positionSizeNum * leverageNum) - positionSizeNum;
   let positionMargin = ethers.utils.parseEther(positionMarginNum.toString());
   let oneInchParts = 10;
   let totalAmountNum = positionSizeNum + positionMarginNum;
@@ -76,7 +76,7 @@ describe("Levered contract", function () {
     owner.sendTransaction({ to: testAddr, value: ethers.utils.parseEther("1") });
 
     returnVal = (await oneSplit.getExpectedReturn(DAI.address, WETH.address, totalAmount, oneInchParts, 0)).returnAmount;
-    minReturnNum = parseInt(returnVal.toString())*slippage;
+    minReturnNum = Math.round(parseInt(returnVal.toString())*slippage);
     minReturn = ethers.utils.parseEther(ethers.utils.formatEther(minReturnNum.toString()));
   });
 
