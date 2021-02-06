@@ -1,27 +1,27 @@
 {
   "manifestVersion": "3.1",
   "impls": {
-    "79ef67268ba2c2e7c5e5a8dea0a905515466bafbe680d8e236a81f31c5e9cd07": {
+    "5d937c8f5961462990f136e801eedfb5a786afb0fd12d85716ba8bc5c6440479": {
       "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
-      "txHash": "0x07c813243178a9afa17a1a1e85d9a23582a4a244521b3bfac8174c261f14bad7",
+      "txHash": "0x1a9bac415423c9e636776d9fe793d7160d36d49963a5e1af8a9074042184c017",
       "layout": {
         "storage": [
           {
             "contract": "FlashLoanReceiverBase",
             "label": "ADDRESSES_PROVIDER",
-            "type": "t_contract(ILendingPoolAddressesProvider)5418",
+            "type": "t_contract(ILendingPoolAddressesProvider)5526",
             "src": "contracts/flashloan/FlashLoanReceiverBase.sol:12"
           },
           {
             "contract": "FlashLoanReceiverBase",
             "label": "LENDING_POOL",
-            "type": "t_contract(ILendingPool)5267",
+            "type": "t_contract(ILendingPool)5375",
             "src": "contracts/flashloan/FlashLoanReceiverBase.sol:13"
           },
           {
             "contract": "FlashLoanReceiverBase",
             "label": "DATA_PROVIDER",
-            "type": "t_contract(IProtocolDataProvider)6095",
+            "type": "t_contract(IProtocolDataProvider)6203",
             "src": "contracts/flashloan/FlashLoanReceiverBase.sol:14"
           },
           {
@@ -39,7 +39,7 @@
           {
             "contract": "LeveredFlashLoan",
             "label": "oneInchProtocol",
-            "type": "t_contract(IOneSplit)5804",
+            "type": "t_contract(IOneSplit)5912",
             "src": "contracts/flashloan/LeveredFlashLoan.sol:18"
           },
           {
@@ -55,41 +55,221 @@
             "src": "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:29"
           },
           {
-            "contract": "Levered",
-            "label": "positionContractCore",
-            "type": "t_contract(IPosition)5981",
-            "src": "contracts/Levered.sol:31"
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "@openzeppelin/contracts-upgradeable/GSN/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "_supportedInterfaces",
+            "type": "t_mapping(t_bytes4,t_bool)",
+            "src": "@openzeppelin/contracts-upgradeable/introspection/ERC165Upgradeable.sol:23"
+          },
+          {
+            "contract": "ERC165Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)49_storage",
+            "src": "@openzeppelin/contracts-upgradeable/introspection/ERC165Upgradeable.sol:59"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "_holderTokens",
+            "type": "t_mapping(t_address,t_struct(UintSet)2635_storage)",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:34"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "_tokenOwners",
+            "type": "t_struct(UintToAddressMap)2075_storage",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:37"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "_tokenApprovals",
+            "type": "t_mapping(t_uint256,t_address)",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:40"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "_operatorApprovals",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_bool))",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:43"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "_name",
+            "type": "t_string_storage",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:46"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "_symbol",
+            "type": "t_string_storage",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:49"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "_tokenURIs",
+            "type": "t_mapping(t_uint256,t_string_storage)",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:52"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "_baseURI",
+            "type": "t_string_storage",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:55"
+          },
+          {
+            "contract": "ERC721Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)41_storage",
+            "src": "@openzeppelin/contracts-upgradeable/token/ERC721/ERC721Upgradeable.sol:480"
           },
           {
             "contract": "Levered",
-            "label": "newPos",
-            "type": "t_contract(IPosition)5981",
+            "label": "positionContractCore",
+            "type": "t_contract(IPosition)6089",
             "src": "contracts/Levered.sol:32"
+          },
+          {
+            "contract": "Levered",
+            "label": "positionList",
+            "type": "t_array(t_address)dyn_storage",
+            "src": "contracts/Levered.sol:33"
           }
         ],
         "types": {
-          "t_contract(IPosition)5981": {
+          "t_contract(IPosition)6089": {
             "label": "contract IPosition"
           },
-          "t_bool": {
-            "label": "bool"
-          },
-          "t_uint16": {
-            "label": "uint16"
+          "t_array(t_address)dyn_storage": {
+            "label": "address[]"
           },
           "t_address": {
             "label": "address"
           },
-          "t_contract(IOneSplit)5804": {
+          "t_mapping(t_address,t_struct(UintSet)2635_storage)": {
+            "label": "mapping(address => struct EnumerableSetUpgradeable.UintSet)"
+          },
+          "t_struct(UintSet)2635_storage": {
+            "label": "struct EnumerableSetUpgradeable.UintSet",
+            "members": [
+              {
+                "label": "_inner",
+                "type": "t_struct(Set)2261_storage"
+              }
+            ]
+          },
+          "t_struct(Set)2261_storage": {
+            "label": "struct EnumerableSetUpgradeable.Set",
+            "members": [
+              {
+                "label": "_values",
+                "type": "t_array(t_bytes32)dyn_storage"
+              },
+              {
+                "label": "_indexes",
+                "type": "t_mapping(t_bytes32,t_uint256)"
+              }
+            ]
+          },
+          "t_array(t_bytes32)dyn_storage": {
+            "label": "bytes32[]"
+          },
+          "t_bytes32": {
+            "label": "bytes32"
+          },
+          "t_mapping(t_bytes32,t_uint256)": {
+            "label": "mapping(bytes32 => uint256)"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_struct(UintToAddressMap)2075_storage": {
+            "label": "struct EnumerableMapUpgradeable.UintToAddressMap",
+            "members": [
+              {
+                "label": "_inner",
+                "type": "t_struct(Map)1811_storage"
+              }
+            ]
+          },
+          "t_struct(Map)1811_storage": {
+            "label": "struct EnumerableMapUpgradeable.Map",
+            "members": [
+              {
+                "label": "_entries",
+                "type": "t_array(t_struct(MapEntry)1803_storage)dyn_storage"
+              },
+              {
+                "label": "_indexes",
+                "type": "t_mapping(t_bytes32,t_uint256)"
+              }
+            ]
+          },
+          "t_array(t_struct(MapEntry)1803_storage)dyn_storage": {
+            "label": "struct EnumerableMapUpgradeable.MapEntry[]"
+          },
+          "t_struct(MapEntry)1803_storage": {
+            "label": "struct EnumerableMapUpgradeable.MapEntry",
+            "members": [
+              {
+                "label": "_key",
+                "type": "t_bytes32"
+              },
+              {
+                "label": "_value",
+                "type": "t_bytes32"
+              }
+            ]
+          },
+          "t_mapping(t_uint256,t_address)": {
+            "label": "mapping(uint256 => address)"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_bool))": {
+            "label": "mapping(address => mapping(address => bool))"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)"
+          },
+          "t_bool": {
+            "label": "bool"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_mapping(t_uint256,t_string_storage)": {
+            "label": "mapping(uint256 => string)"
+          },
+          "t_array(t_uint256)41_storage": {
+            "label": "uint256[41]"
+          },
+          "t_mapping(t_bytes4,t_bool)": {
+            "label": "mapping(bytes4 => bool)"
+          },
+          "t_bytes4": {
+            "label": "bytes4"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_uint16": {
+            "label": "uint16"
+          },
+          "t_contract(IOneSplit)5912": {
             "label": "contract IOneSplit"
           },
-          "t_contract(ILendingPoolAddressesProvider)5418": {
+          "t_contract(ILendingPoolAddressesProvider)5526": {
             "label": "contract ILendingPoolAddressesProvider"
           },
-          "t_contract(ILendingPool)5267": {
+          "t_contract(ILendingPool)5375": {
             "label": "contract ILendingPool"
           },
-          "t_contract(IProtocolDataProvider)6095": {
+          "t_contract(IProtocolDataProvider)6203": {
             "label": "contract IProtocolDataProvider"
           }
         }

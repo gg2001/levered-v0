@@ -19,6 +19,8 @@ describe("Levered contract", function () {
   let DAI;
   let wethAddr = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
   let WETH;
+  let awethAddr = "0x030bA81f1c18d280636F32af80b9AAd02Cf0854e";
+  let aWETH;
 
   let Levered;
   let levered;
@@ -37,9 +39,10 @@ describe("Levered contract", function () {
 
     DAI = await ethers.getContractAt("IERC20", daiAddr);
     WETH = await ethers.getContractAt("IERC20", wethAddr);
+    aWETH = await ethers.getContractAt("IERC20", awethAddr);
 
     Levered = await ethers.getContractFactory("Levered");
-    levered = await upgrades.deployProxy(Levered, [addressesProvider.address, referralCode, referral, oneSplit.address, dataProvider.address], { initializer: 'initialize' });
+    levered = await upgrades.deployProxy(Levered, [addressesProvider.address, referralCode, referral, oneSplit.address, dataProvider.address, "Levered", "LEVP"], { initializer: 'initialize' });
   });
 
   describe("Deployment", function () {

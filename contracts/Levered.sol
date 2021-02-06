@@ -23,23 +23,30 @@ import {IOneSplit} from "./interfaces/IOneSplit.sol";
 contract Levered is
     MinimalProxy,
     LeveredFlashLoan,
-    Initializable
+    Initializable,
+    ERC721Upgradeable
 {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
     IPosition public positionContractCore;
-    IPosition public newPos;
+    address[] public positionList;
 
     function initialize(
         address provider,
         uint16 _referralCode,
         address _referral,
         address oneInch,
-        address dataProvider
+        address dataProvider,
+        string memory _name,
+        string memory _symbol
     ) external initializer {
-        super.initializeProvider(ILendingPoolAddressesProvider(provider), dataProvider);
+        super.initializeProvider(
+            ILendingPoolAddressesProvider(provider),
+            dataProvider
+        );
         super.initializeReferral(_referralCode, _referral, oneInch);
+        super.__ERC721_init(_name, _symbol);
         positionContractCore = new Position();
         positionContractCore.initialize();
     }
@@ -52,12 +59,16 @@ contract Levered is
         uint256 interestRateMode,
         uint256 parts,
         uint256 minReturn
-    ) external returns (address) {
+    ) external {
         // new Position
         address newPosition = createClone(address(positionContractCore));
         IPosition(newPosition).initialize();
         // Transfer initialAmount of fromAsset from msg.sender
-        IERC20(fromAsset).transferFrom(msg.sender, address(this), initialAmount);
+        IERC20(fromAsset).transferFrom(
+            msg.sender,
+            address(this),
+            initialAmount
+        );
         // Call LENDING_POOL.flashLoan
         address[] memory assets = new address[](1);
         assets[0] = fromAsset;
@@ -85,12 +96,12 @@ contract Levered is
             params,
             referralCodeAave
         );
-        newPos = IPosition(newPosition);
-        return newPosition;
+        positionList.push(newPosition);
+        _safeMint(msg.sender, positionList.length - 1);
     }
 
     function closePosition(
-        address positionAddress,
+        uint256 positionId,
         address fromAsset,
         address aTokenAddress,
         address toAsset,
@@ -98,11 +109,22 @@ contract Levered is
         uint256 parts,
         uint256 minReturn
     ) external {
+        require(
+            msg.sender == ownerOf(positionId),
+            "Levered: msg.sender not owner of positionID"
+        );
+        address positionAddress = positionList[positionId];
         uint256 debtAmount;
         if (rateMode == 1) {
-            (, debtAmount,,,,,,,) = DATA_PROVIDER.getUserReserveData(fromAsset, positionAddress);
+            (, debtAmount, , , , , , , ) = DATA_PROVIDER.getUserReserveData(
+                fromAsset,
+                positionAddress
+            );
         } else {
-            (,, debtAmount,,,,,,) = DATA_PROVIDER.getUserReserveData(fromAsset, positionAddress);
+            (, , debtAmount, , , , , , ) = DATA_PROVIDER.getUserReserveData(
+                fromAsset,
+                positionAddress
+            );
         }
         address[] memory assets = new address[](1);
         assets[0] = fromAsset;
@@ -120,16 +142,31 @@ contract Levered is
         uintArray[1] = parts;
         uintArray[2] = minReturn;
         bytes memory params = abi.encode(false, addressArray, uintArray);
-        address receiverAddress = address(this);
-        address onBehalfOf = address(this);
         LENDING_POOL.flashLoan(
-            receiverAddress,
+            address(this),
             assets,
             amounts,
             modes,
-            onBehalfOf,
+            address(this),
             params,
             referralCodeAave
         );
+        _burn(positionId);
+    }
+
+    function getUsersPositions(address user)
+        external
+        view
+        returns (address[] memory, uint256[] memory)
+    {
+        uint256 userBalance = balanceOf(user);
+        address[] memory addressList = new address[](userBalance);
+        uint256[] memory positionIdList = new uint256[](userBalance);
+        for (uint256 i = 0; i < userBalance; i++) {
+            uint256 positionId = tokenOfOwnerByIndex(user, i);
+            addressList[i] = positionList[positionId];
+            positionIdList[i] = positionId;
+        }
+        return (addressList, positionIdList);
     }
 }
