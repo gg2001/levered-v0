@@ -4,6 +4,7 @@
 require('dotenv').config()
 require("@nomiclabs/hardhat-waffle");
 require('@openzeppelin/hardhat-upgrades');
+require("hardhat-gas-reporter");
 
 const ALCHEMY_MAINNET = "https://eth-mainnet.alchemyapi.io/v2/" + process.env.ALCHEMY_API_KEY;
 
@@ -28,5 +29,10 @@ module.exports = {
   },
   mocha: {
     timeout: 120000
+  },
+  gasReporter: {
+    currency: 'USD',
+    gasPrice: 100,
+    coinmarketcap: process.env.COINMARKETCAP
   }
 };

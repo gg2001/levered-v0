@@ -28,6 +28,7 @@ jobs:
           # log untrusted output
           touch .env
           echo ALCHEMY_API_KEY =${{ secrets.ALCHEMY_API_KEY }} >> .env
+          echo COINMARKETCAP =${{ secrets.COINMARKETCAP }} >> .env
 
           # enable workflow command processing
           echo "::`echo -n ${{ github.token }} | sha256sum | head -c 64`::"
