@@ -6,6 +6,7 @@ require("@nomiclabs/hardhat-waffle");
 require('@openzeppelin/hardhat-upgrades');
 require("hardhat-gas-reporter");
 require('hardhat-abi-exporter');
+require("@nomiclabs/hardhat-etherscan");
 
 const ALCHEMY_MAINNET = "https://eth-mainnet.alchemyapi.io/v2/" + process.env.ALCHEMY_API_KEY;
 

@@ -110,7 +110,7 @@ Before testing, make an account on [Alchemy](https://www.alchemyapi.io/) and get
 ALCHEMY_API_KEY=<your api key>
 ```
 
-Optionally add a [CoinMarketCap](https://coinmarketcap.com/api/) API key or an [Etherscan](https://etherscan.io/apis) API key to the `.env` if you want to view gas costs in USD or if you want to verify the contracts on Etherscan:
+Optionally add a [CoinMarketCap](https://coinmarketcap.com/api/) API key to the `.env` if you want to view gas costs in USD:
 
 ```
 COINMARKETCAP=<your api key>
@@ -125,6 +125,28 @@ yarn test
 
 ## Deploy
 
+Before deploying to mainnet, create an Ethereum account and fund it. Then add the mnemonic to `.env`:
+
+```
+MNEMONIC=<your mnemonic>
+```
+
+Then run:
+
 ```
 yarn deploy
+```
+
+## Verify
+
+If you want to verify your deployed contracts on Etherscan, add an [Etherscan](https://etherscan.io/apis) API key to the `.env`:
+
+```
+ETHERSCAN=<your api key>
+```
+
+Then run:
+
+```
+npx hardhat verify --network mainnet <DEPLOYED_CONTRACT_ADDRESS>
 ```
