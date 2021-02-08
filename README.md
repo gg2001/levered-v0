@@ -4,7 +4,7 @@
 
 Contracts will be deployed to mainnet by February 13th. The frontend at https://levered.finance/ will be available once the contracts are deployed.
 
-Open long and short positions on any tokens listed on [Aave](https://aave.com/) with up to 5x leverage. [Levered](https://levered.finance/) uses [Aave](https://aave.com/) for borrowing and [1inch.exchange](https://1inch.exchange/) for trading. The positions are automatically represented as an NFT that can be transferred to other accounts. Every position is isolated in its own address so users can have multiple positions that don't affect each other.
+Open long and short positions on any tokens listed on [Aave](https://aave.com/) with up to 5x leverage. [Levered](https://levered.finance/) uses [Aave](https://aave.com/) for borrowing and [1inch.exchange](https://1inch.exchange/) for trading. The positions are automatically represented as an NFT that can be transferred to other accounts. The positions are isolated in their own address so users can have multiple positions that don't affect each other.
 
 This table shows the maximum leverage possible for each asset ([source](https://docs.aave.com/risk/asset-risk/risk-parameters)):
 
