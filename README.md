@@ -33,6 +33,59 @@ The theoretical maximum leverage for an asset can be calculated with the formula
 
 The frontend will only allow you to use up to the allowed maximum leverage since using leverage close to the theoretical maximum results in high liquidation risk, and a high chance of the transaction reverting. Note that `SNX` is not available in the frontend since it has a very low allowed maximum leverage.
 
+## Docs
+
+[`Levered.sol`](https://github.com/gg2001/levered/blob/master/contracts/Levered.sol) is the main contract that users interact with. [`ILevered.sol`](https://github.com/gg2001/levered/blob/master/contracts/interfaces/ILevered.sol) is the interface for it:
+
+```
+interface ILevered {
+    event NewPosition(
+        address indexed user,
+        address position,
+        uint256 positionId
+    );
+
+    event ClosePosition(address indexed user, uint256 positionId);
+
+    function initialize(
+        address provider,
+        uint16 _referralCode,
+        address _referral,
+        address oneInch,
+        address dataProvider,
+        string memory _name,
+        string memory _symbol
+    ) external;
+
+    function openPosition(
+        address fromAsset,
+        uint256 initialAmount,
+        uint256 marginAmount,
+        address toAsset,
+        uint256 interestRateMode,
+        uint256 parts,
+        uint256 minReturn
+    ) external;
+
+    function closePosition(
+        uint256 positionId,
+        address fromAsset,
+        address aTokenAddress,
+        address toAsset,
+        uint256 rateMode,
+        uint256 parts,
+        uint256 minReturn
+    ) external;
+
+    function getUsersPositions(address user)
+        external
+        view
+        returns (address[] memory, uint256[] memory);
+}
+```
+
+Any [`IERC721.sol`](https://docs.openzeppelin.com/contracts/3.x/api/token/erc721#IERC721) interface can be used for interacting with the NFTs. The ABI can be found [here](https://github.com/gg2001/levered/blob/master/abi/contracts/Levered.sol/Levered.json).
+
 ## Install
 
 ```
@@ -57,7 +110,7 @@ Before testing, make an account on [Alchemy](https://www.alchemyapi.io/) and get
 ALCHEMY_API_KEY=<your api key>
 ```
 
-Optionally add a CoinMarketCap API key or an Etherscan API key if you want to view gas costs in USD or if you want to verify the contracts on Etherscan:
+Optionally add a [CoinMarketCap](https://coinmarketcap.com/api/) API key or an [Etherscan](https://etherscan.io/apis) API key to the `.env` if you want to view gas costs in USD or if you want to verify the contracts on Etherscan:
 
 ```
 COINMARKETCAP=<your api key>
@@ -70,3 +123,8 @@ Then run:
 yarn test
 ```
 
+## Deploy
+
+```
+yarn deploy
+```
