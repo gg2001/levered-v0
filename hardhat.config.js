@@ -16,7 +16,8 @@ module.exports = {
       forking: {
         url: ALCHEMY_MAINNET,
         blockNumber: 11786277
-      }
+      },
+      chainId: 1337
     }
   },
   solidity: {
