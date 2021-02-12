@@ -1,5 +1,6 @@
 const { expect } = require("chai");
 const { ethers, upgrades } = require("hardhat");
+const abis = require("../scripts/abis");
 
 describe("Levered contract", function () {
   let addressesProviderAddr = "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5";
@@ -21,10 +22,13 @@ describe("Levered contract", function () {
 
   let daiAddr = "0x6B175474E89094C44Da98b954EedeAC495271d0F";
   let DAI;
+  let daiDecimals;
   let wethAddr = "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2";
   let WETH;
+  let wethDecimals;
   let awethAddr = "0x030bA81f1c18d280636F32af80b9AAd02Cf0854e";
   let aWETH;
+  let awethDecimals;
 
   let Levered;
   let levered;
@@ -35,19 +39,18 @@ describe("Levered contract", function () {
 
   let positionSizeNum = 1000;
   let leverageNum = 4.5;
-  let slippage = 0.99;
+  let slippage = 990;
+  let slippagePer = 1000;
   let interestRateMode = 2;
 
-  let flashLoanFee = 0.0009;
-  let flashLoanFeePlusOne = 1 + flashLoanFee;
-  let positionSize = ethers.utils.parseEther(positionSizeNum.toString());
+  let positionSize;
   // If leverageNum = 5 (Maximum)
   // let positionMarginNum = ((positionSizeNum * leverageNum) - positionSizeNum)/(1.06)
   let positionMarginNum = (positionSizeNum * leverageNum) - positionSizeNum;
-  let positionMargin = ethers.utils.parseEther(positionMarginNum.toString());
+  let positionMargin;
   let oneInchParts = 10;
   let totalAmountNum = positionSizeNum + positionMarginNum;
-  let totalAmount = ethers.utils.parseEther(totalAmountNum.toString());
+  let totalAmount;
 
   let returnVal;
   let minReturnNum;
@@ -61,9 +64,16 @@ describe("Levered contract", function () {
     lendingPool = await ethers.getContractAt("ILendingPool", lendingPoolAddr);
     oneInch = await ethers.getContractAt("IOneInchExchange", oneInchAddr);
 
-    DAI = await ethers.getContractAt("IERC20", daiAddr);
-    WETH = await ethers.getContractAt("IERC20", wethAddr);
-    aWETH = await ethers.getContractAt("IERC20", awethAddr);
+    DAI = new ethers.Contract(daiAddr, abis.erc20, owner);
+    daiDecimals = await DAI.decimals();
+    WETH = new ethers.Contract(wethAddr, abis.erc20, owner);
+    wethDecimals = await WETH.decimals();
+    aWETH = new ethers.Contract(awethAddr, abis.erc20, owner);
+    awethDecimals = await aWETH.decimals();
+
+    positionSize = ethers.utils.parseUnits(positionSizeNum.toString(), daiDecimals);
+    positionMargin = ethers.utils.parseUnits(positionMarginNum.toString(), daiDecimals);
+    totalAmount = ethers.utils.parseEther(totalAmountNum.toString(), daiDecimals);
 
     Levered = await ethers.getContractFactory("Levered");
     levered = await upgrades.deployProxy(Levered, [addressesProvider.address, referralCode, referral, oneSplit.address, dataProvider.address, name, symbol], { initializer: 'initialize' });
@@ -76,8 +86,7 @@ describe("Levered contract", function () {
     owner.sendTransaction({ to: testAddr, value: ethers.utils.parseEther("1") });
 
     returnVal = (await oneSplit.getExpectedReturn(DAI.address, WETH.address, totalAmount, oneInchParts, 0)).returnAmount;
-    minReturnNum = Math.round(parseInt(returnVal.toString())*slippage);
-    minReturn = ethers.utils.parseEther(ethers.utils.formatEther(minReturnNum.toLocaleString('fullwide', {useGrouping:false})));
+    minReturn = returnVal.mul(slippage).div(slippagePer);
   });
 
   describe("Deployment", function () {
@@ -119,7 +128,7 @@ describe("Levered contract", function () {
       } else {
         expect((await dataProvider.getUserReserveData(DAI.address, newPosition)).currentVariableDebt.gte(positionMargin)).to.be.true;
       }
-      expect((await lendingPool.getUserAccountData(newPosition)).healthFactor.gte(ethers.utils.parseEther('1'))).to.be.true;
+      expect((await lendingPool.getUserAccountData(newPosition)).healthFactor.gt(ethers.utils.parseEther('1'))).to.be.true;
       expect(await levered.ownerOf(newPositionIndex)).to.be.equal(testAddr);
     });
   });
@@ -134,8 +143,7 @@ describe("Levered contract", function () {
 
       let collateral = (await dataProvider.getUserReserveData(WETH.address, newPosition)).currentATokenBalance;
       let returnValClose = (await oneSplit.getExpectedReturn(WETH.address, DAI.address, collateral, oneInchParts, 0)).returnAmount;
-      let minReturnCloseNum = Math.round(parseInt(returnValClose.toString())*slippage);
-      let minReturnClose = ethers.utils.parseEther(ethers.utils.formatEther(minReturnCloseNum.toLocaleString('fullwide', {useGrouping:false})));
+      let minReturnClose = returnValClose.mul(slippage).div(slippagePer);
 
       await expect(levered.closePosition(newPositionIndex, DAI.address, aWETH.address, WETH.address, interestRateMode, oneInchParts, minReturnClose)).to.be.revertedWith('Levered: msg.sender not owner of positionID');
 
@@ -167,8 +175,7 @@ describe("Levered contract", function () {
 
       let collateral = (await dataProvider.getUserReserveData(WETH.address, transferredPosition)).currentATokenBalance;
       let returnValClose = (await oneSplit.getExpectedReturn(WETH.address, DAI.address, collateral, oneInchParts, 0)).returnAmount;
-      let minReturnCloseNum = Math.round(parseInt(returnValClose.toString())*slippage);
-      let minReturnClose = ethers.utils.parseEther(ethers.utils.formatEther(minReturnCloseNum.toLocaleString('fullwide', {useGrouping:false})));
+      let minReturnClose = returnValClose.mul(slippage).div(slippagePer);
 
       await expect(levered.connect(testSigner).closePosition(newPositionIndex, DAI.address, aWETH.address, WETH.address, interestRateMode, oneInchParts, minReturnClose)).to.be.revertedWith('Levered: msg.sender not owner of positionID');
 
