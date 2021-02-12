@@ -28,10 +28,6 @@
     "deploy": "hardhat run --network mainnet scripts/deploy.js"
   },
   "dependencies": {
-    "@typechain/ethers-v5": "^5.0.0",
-    "dotenv": "^8.2.0",
-    "hardhat-typechain": "^0.3.4",
-    "ts-generator": "^0.1.1",
-    "typechain": "^4.0.1"
+    "dotenv": "^8.2.0"
   }
 }
