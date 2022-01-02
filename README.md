@@ -1,6 +1,6 @@
 # Open leveraged longs/shorts on Aave
 
-![CI](https://github.com/gg2001/levered/workflows/CI/badge.svg)
+![CI](https://github.com/gg2001/levered-v0/workflows/CI/badge.svg)
 
 Max leverage for each asset:
 
